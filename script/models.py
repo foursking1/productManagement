@@ -185,7 +185,7 @@ class NN_with_EntityEmbedding(Model):
         self.nb_epoch = 10
         self.checkpointer = ModelCheckpoint(filepath="best_model_weights.hdf5", verbose=1, save_best_only=True)
         self.max_log_y = max(numpy.max(numpy.log(y_train)), numpy.max(numpy.log(y_val)))
-        self.__build_keras_model()
+        self.__build_keras_model_v2()
         self.fit(X_train, y_train, X_val, y_val)
 
     def preprocessing(self, X):
