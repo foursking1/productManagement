@@ -202,17 +202,17 @@ class NN_with_EntityEmbedding(Model):
         models = []
 
         model_cate1 = Sequential()
-        model_cate1.add(Embedding(14, 4, input_length=1))
+        model_cate1.add(Embedding(15, 4, input_length=1))
         model_cate1.add(Reshape(target_shape=(4,)))
         models.append(model_cate1)
 
         model_cate2 = Sequential()
-        model_cate2.add(Embedding(57, 5, input_length=1))
+        model_cate2.add(Embedding(73, 5, input_length=1))
         model_cate2.add(Reshape(target_shape=(5,)))
         models.append(model_cate2)
 
         model_item =  Sequential()
-        model_item.add(Embedding(1214, 10, input_length=1))
+        model_item.add(Embedding(2307, 10, input_length=1))
         model_item.add(Reshape(target_shape=(10,)))
         models.append(model_item)
 

@@ -17,6 +17,9 @@ saved_embeddings_fname = "embeddings.pickle"  # Use plot_embeddings.ipynb to cre
 f = open('feature_train_data.pickle', 'rb')
 (X, y) = pickle.load(f)
 
+f = open('feature_test_data.pickle', 'rb')
+(test_X, test_y) = pickle.load(f)
+
 num_records = len(X)
 train_size = int(train_ratio * num_records)
 
@@ -106,3 +109,11 @@ print(r_train)
 print("Validation error...")
 r_val = evaluate_models(models, X_val, y_val)
 print(r_val)
+
+print("next month error...")
+r_test = evaluate_models(models, test_X, test_y)
+print(r_val)
+
+
+
+
