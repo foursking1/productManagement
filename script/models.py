@@ -44,26 +44,32 @@ def embed_features(X, saved_embeddings_fname):
 def split_features(X):
     X_list = []
 
-    store_index = X[..., [1]]
-    X_list.append(store_index)
+    cate_1 = X[..., [0]]
+    X_list.append(cate_1)
 
-    day_of_week = X[..., [2]]
-    X_list.append(day_of_week)
+    cate_2 = X[..., [1]]
+    X_list.append(cate_2)
 
-    promo = X[..., [3]]
-    X_list.append(promo)
+    item_id = X[..., [2]]
+    X_list.append(item_id)
 
-    year = X[..., [4]]
+    year = X[..., [3]]
     X_list.append(year)
 
-    month = X[..., [5]]
+    month = X[..., [4]]
     X_list.append(month)
 
-    day = X[..., [6]]
+    day = X[..., [5]]
     X_list.append(day)
 
-    State = X[..., [7]]
-    X_list.append(State)
+    week_day = X[..., [6]]
+    X_list.append(week_day)
+
+    discount = X[..., [7]]
+    X_list.append(discount)
+
+    cont = X[..., [8,9,10]]
+    X_list.append(cont)
 
     return X_list
 
