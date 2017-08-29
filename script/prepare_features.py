@@ -34,16 +34,19 @@ def feature_engineering(df_train):
     print "train size %d" % len(df_train.index)
     print "test size %d" % len(df_test.index)
 
-    df_train_X = df_train[['cate_1', 'cate_2', 'item_id', 'year', 'month', 'day', 'week_day', 'discount', 'retail_price', 'total_uv', 'uv']]
+    df_train_X = df_train[['cate_1', 'cate_2', 'skuid', 'year', 'month', 'day', 'week_day', 'discount', 'retail_price', 'total_uv', 'uv']]
     df_train_Y = df_train['amount']
 
-    on_sale_id = df_train_X['item_id'].values
+    on_sale_id = df_train_X['skuid'].values
     on_sale_cate_name = df_train_X['cate_2'].values
 
-    df_test = df_test[df_test['item_id'].isin(on_sale_id)]
+    df_test = df_test[df_test['skuid'].isin(on_sale_id)]
     df_test = df_test[df_test['cate_2'].isin(on_sale_cate_name)]
 
-    df_test_X = df_test[['cate_1', 'cate_2', 'item_id', 'year', 'month', 'day', 'week_day', 'discount', 'retail_price', 'total_uv', 'uv']]
+    with open('test_df.pickle', 'wb') as f:
+        pickle.dump(df_test, f, -1)
+
+    df_test_X = df_test[['cate_1', 'cate_2', 'skuid', 'year', 'month', 'day', 'week_day', 'discount', 'retail_price', 'total_uv', 'uv']]
     df_test_Y = df_test['amount']
     return df_train_X.values, df_train_Y.values, df_test_X.values, df_test_Y.values
 
@@ -79,6 +82,7 @@ with open('les.pickle', 'wb') as f:
 
 train_data_X = train_data_X
 train_data_y = np.array(train_data_y)
+print len(train_data_X)
 
 with open('feature_train_data.pickle', 'wb') as f:
     pickle.dump((train_data_X, train_data_y), f, -1)
@@ -86,6 +90,7 @@ with open('feature_train_data.pickle', 'wb') as f:
 
 test_data_X = test_data_X
 test_data_y = np.array(test_data_y)
+print len(test_data_X)
 
 with open('feature_test_data.pickle', 'wb') as f:
     pickle.dump((test_data_X, test_data_y), f, -1)

@@ -50,7 +50,7 @@ df_train['discount'] = df_train['折扣范围']
 
 df_train['time'] = df_train['日期']
 
-df_train = df_train[['cate_1', 'cate_2', 'item_id', 'time', 'retail_price', 'discount', 'user', 'amount', 'money', 'newuser','newamount','newmoney']]
+df_train = df_train[['cate_1', 'cate_2', 'item_id', 'skuid', 'time', 'retail_price', 'discount', 'user', 'amount', 'money', 'newuser','newamount','newmoney']]
 
 # convert data type
 df_train['item_id'] = df_train['item_id'].astype("int")

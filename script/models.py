@@ -68,6 +68,7 @@ def split_features(X):
     discount = X[..., [7]]
     X_list.append(discount)
 
+    #cont = X[..., [8]]
     cont = X[..., [8,9,10]]
     X_list.append(cont)
 
@@ -188,7 +189,7 @@ class NN_with_EntityEmbedding(Model):
 
     def __init__(self, X_train, y_train, X_val, y_val):
         super(NN_with_EntityEmbedding, self).__init__()
-        self.nb_epoch = 10
+        self.nb_epoch = 4
         self.checkpointer = ModelCheckpoint(filepath="best_model_weights.hdf5", verbose=1, save_best_only=True)
         self.max_log_y = max(numpy.max(numpy.log(y_train)), numpy.max(numpy.log(y_val)))
         self.__build_keras_model_v2()
@@ -212,8 +213,10 @@ class NN_with_EntityEmbedding(Model):
         models.append(model_cate2)
 
         model_item =  Sequential()
-        model_item.add(Embedding(2307, 10, input_length=1))
-        model_item.add(Reshape(target_shape=(10,)))
+#        model_item.add(Embedding(2307, 10, input_length=1))
+        model_item.add(Embedding(8847, 12, input_length=1))
+#        model_item.add(Reshape(target_shape=(10,)))
+        model_item.add(Reshape(target_shape=(12,)))
         models.append(model_item)
 
         model_year = Sequential()
@@ -241,9 +244,14 @@ class NN_with_EntityEmbedding(Model):
         model_discount.add(Reshape(target_shape=(3,)))
         models.append(model_discount)
 
+
         model_continue = Sequential()
         model_continue.add(Dense(3, input_dim=3))
         models.append(model_continue)
+
+        #model_continue = Sequential()
+        #model_continue.add(Dense(1, input_dim=1))
+        #models.append(model_continue)
 
         self.model = Sequential()
         self.model.add(Merge(models, mode='concat'))
@@ -261,7 +269,7 @@ class NN_with_EntityEmbedding(Model):
         models = []
 
         model_store = Sequential()
-        model_store.add(Embedding(1115, 10, input_length=1))
+        model_store.add(Embedding(8847, 12, input_length=1))
         model_store.add(Reshape(target_shape=(10,)))
         models.append(model_store)
 
@@ -303,7 +311,7 @@ class NN_with_EntityEmbedding(Model):
         self.model.add(Dense(1))
         self.model.add(Activation('sigmoid'))
 
-        self.model.compile(loss='mean_absolute_error', optimizer='adam')
+        self.model.compile(lr=0.0001, loss='mean_absolute_error', optimizer='adam')
 
     def _val_for_fit(self, val):
         val = numpy.log(val) / self.max_log_y
@@ -346,7 +354,7 @@ class NN(Model):
         self.model.add(Dense(1))
         self.model.add(Activation('sigmoid'))
 
-        self.model.compile(loss='mean_absolute_error', optimizer='adam')
+        self.model.compile(lr=0.0001, loss='mean_absolute_error', optimizer='adam')
 
     def _val_for_fit(self, val):
         val = numpy.log(val) / self.max_log_y
