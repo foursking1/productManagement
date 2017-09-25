@@ -9,7 +9,7 @@ from sklearn import neighbors
 from sklearn.preprocessing import Normalizer
 
 from keras.models import Sequential
-from keras.layers.core import Dense, Activation, Reshape
+from keras.layers.core import Dense, Activation, Reshape, Dropout
 from keras.layers import Merge
 from keras.layers.embeddings import Embedding
 from keras.callbacks import ModelCheckpoint
@@ -53,23 +53,23 @@ def split_features(X):
     item_id = X[..., [2]]
     X_list.append(item_id)
 
-    year = X[..., [3]]
-    X_list.append(year)
+#    year = X[..., [3]]
+#    X_list.append(year)
 
-    month = X[..., [4]]
-    X_list.append(month)
+#    month = X[..., [4]]
+#    X_list.append(month)
 
-    day = X[..., [5]]
-    X_list.append(day)
+#    day = X[..., [5]]
+#    X_list.append(day)
 
     week_day = X[..., [6]]
     X_list.append(week_day)
 
-    discount = X[..., [7]]
-    X_list.append(discount)
+    #discount = X[..., [7]]
+    #X_list.append(discount)
 
     #cont = X[..., [8]]
-    cont = X[..., [8,9,10]]
+    cont = X[..., [7,8,9,10]]
     X_list.append(cont)
 
     return X_list
@@ -208,45 +208,45 @@ class NN_with_EntityEmbedding(Model):
         models.append(model_cate1)
 
         model_cate2 = Sequential()
-        model_cate2.add(Embedding(73, 5, input_length=1))
+        model_cate2.add(Embedding(74, 5, input_length=1))
         model_cate2.add(Reshape(target_shape=(5,)))
         models.append(model_cate2)
 
         model_item =  Sequential()
 #        model_item.add(Embedding(2307, 10, input_length=1))
-        model_item.add(Embedding(8847, 12, input_length=1))
+        model_item.add(Embedding(9681, 12, input_length=1))
 #        model_item.add(Reshape(target_shape=(10,)))
         model_item.add(Reshape(target_shape=(12,)))
         models.append(model_item)
 
-        model_year = Sequential()
-        model_year.add(Embedding(2, 1, input_length=1))
-        model_year.add(Reshape(target_shape=(1,)))
-        models.append(model_year)
+#        model_year = Sequential()
+#        model_year.add(Embedding(2, 1, input_length=1))
+#        model_year.add(Reshape(target_shape=(1,)))
+#        models.append(model_year)
 
-        model_month = Sequential()
-        model_month.add(Embedding(12, 6, input_length=1))
-        model_month.add(Reshape(target_shape=(6,)))
-        models.append(model_month)
+#        model_month = Sequential()
+#        model_month.add(Embedding(12, 5, input_length=1))
+#        model_month.add(Reshape(target_shape=(5,)))
+#        models.append(model_month)
 
-        model_day = Sequential()
-        model_day.add(Embedding(31, 10, input_length=1))
-        model_day.add(Reshape(target_shape=(10,)))
-        models.append(model_day)
+#        model_day = Sequential()
+#        model_day.add(Embedding(31, 8, input_length=1))
+#        model_day.add(Reshape(target_shape=(8,)))
+#        models.append(model_day)
 
         model_week_day = Sequential()
         model_week_day.add(Embedding(7, 4, input_length=1))
         model_week_day.add(Reshape(target_shape=(4,)))
         models.append(model_week_day)
 
-        model_discount = Sequential()
-        model_discount.add(Embedding(4, 3, input_length=1))
-        model_discount.add(Reshape(target_shape=(3,)))
-        models.append(model_discount)
+#        model_discount = Sequential()
+#        model_discount.add(Embedding(4, 3, input_length=1))
+#        model_discount.add(Reshape(target_shape=(3,)))
+#        models.append(model_discount)
 
 
         model_continue = Sequential()
-        model_continue.add(Dense(3, input_dim=3))
+        model_continue.add(Dense(4, input_dim=4))
         models.append(model_continue)
 
         #model_continue = Sequential()
@@ -257,12 +257,15 @@ class NN_with_EntityEmbedding(Model):
         self.model.add(Merge(models, mode='concat'))
         self.model.add(Dense(1000, init='uniform'))
         self.model.add(Activation('relu'))
+        self.model.add(Dropout(0.3))
         self.model.add(Dense(500, init='uniform'))
         self.model.add(Activation('relu'))
+        self.model.add(Dropout(0.3))
         self.model.add(Dense(1))
         self.model.add(Activation('sigmoid'))
 
         self.model.compile(loss='mean_absolute_error', optimizer='adam')
+        #self.model.compile(loss='mse', optimizer='adam')
 
 
     def __build_keras_model(self):

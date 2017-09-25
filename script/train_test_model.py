@@ -53,7 +53,7 @@ def sample(X, y, n):
     indices = numpy.random.randint(num_row, size=n)
     return X[indices, :], y[indices]
 
-X_train, y_train = sample(X_train, y_train, 400000)  # Simulate data sparsity
+X_train, y_train = sample(X_train, y_train, 600000)  # Simulate data sparsity
 #X_train, y_train = sample(X_train, y_train, 4000)  # Simulate data sparsity
 print("Number of samples used for training: " + str(y_train.shape[0]))
 
